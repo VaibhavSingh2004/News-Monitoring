@@ -61,8 +61,6 @@ def fetch_stories(request):
     return JsonResponse(services.get_stories_json(stories_qs, page_number))
 
 
-# DRF
-
 @login_required
 def delete(request, story_id):
     story = services.get_object_or_404(Story, id=story_id, added_by=request.user)
