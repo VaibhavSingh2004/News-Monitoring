@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='css',
+            model_name='story',
             name='tagged_companies',
             field=models.ManyToManyField(blank=True, related_name='tagged_stories', to='company.company'),
         ),

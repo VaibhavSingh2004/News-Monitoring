@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='css',
+            model_name='story',
             name='source',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
                                     related_name='stories', to='source.source'),

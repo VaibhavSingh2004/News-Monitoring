@@ -11,12 +11,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='css',
+            model_name='story',
             name='article_url',
             field=models.URLField(max_length=500),
         ),
         migrations.AlterField(
-            model_name='css',
+            model_name='story',
             name='tagged_companies',
             field=models.ManyToManyField(blank=True, null=True, related_name='tagged_stories', to='company.company'),
         ),
