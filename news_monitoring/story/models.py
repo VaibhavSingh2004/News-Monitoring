@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from news_monitoring.company.models import Company
 from news_monitoring.source.models import Source
@@ -20,6 +21,28 @@ class Story(models.Model):
     title = models.CharField(max_length=255)
     body_text = models.TextField()
     article_url = models.URLField(max_length=500)
+
+    persons = ArrayField(
+        base_field=models.CharField(max_length=50),
+        blank=True,
+        null=True,
+        default=list,
+        help_text="List of recognized person entities"
+    )
+    locations = ArrayField(
+        base_field=models.CharField(max_length=100),
+        blank=True,
+        null=True,
+        default=list,
+        help_text="List of recognized location entities"
+    )
+    organizations = ArrayField(
+        base_field=models.CharField(max_length=100),
+        blank=True,
+        null=True,
+        default=list,
+        help_text="List of recognized organization entities"
+    )
 
     class Meta:
         unique_together = ("company", "article_url")  # Ensuring uniqueness per company
