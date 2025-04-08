@@ -325,3 +325,4 @@ dump.rdb
 news_monitoring/media/
 
 .pytest_cache/
+.env
