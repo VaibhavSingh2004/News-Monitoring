@@ -54,12 +54,13 @@ function fetchSources(page=1) {
                             <td><a href="${source.url}" target="_blank">${source.url}</a></td>
                             <td>${companies}</td>
                             <td>
+                                <a href="/source/fetch-story/${source.id}/" class="edit-btn">Fetch Story</a>
                                 <a href="/source/edit/${source.id}/" class="edit-btn">Edit</a>
                                 <form action="/source/delete/${source.id}/" method="post" class="delete-form">
                                     <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
                                     <button type="submit" class="delete-btn" onclick="return confirm('Are you sure?');">Delete</button>
                                 </form>
-                                <button class="fetch-story-btn" data-source-id="${source.id}">Fetch Story</button>
+
                             </td>
                         </tr>`);
 //                    sourceTableBody.append(rowHtml);

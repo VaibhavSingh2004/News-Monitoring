@@ -20,11 +20,12 @@ def get_story(user, story_id):
     return story_obj, tagged_companies
 
 
-def get_stories(user, search_query, filter_date):
+def get_stories(user, search_query, filter_date, story_id):
     """Fetch and filter stories based on search query and date."""
+
     stories_qs = Story.objects.select_related("company").prefetch_related(
         Prefetch("tagged_companies", queryset=Company.objects.only("id", "name"))
-    ).only("id", "title", "article_url", "published_date", "body_text", "company_id")
+    )
 
     if not user.is_staff:
         stories_qs = stories_qs.filter(company=user.company)
@@ -35,7 +36,7 @@ def get_stories(user, search_query, filter_date):
     if filter_date:
         stories_qs = stories_qs.filter(published_date=filter_date)
 
-    return stories_qs
+    return stories_qs.filter(root_id=story_id)
 
 
 def get_stories_json(stories_qs, page_number):
@@ -51,7 +52,11 @@ def get_stories_json(stories_qs, page_number):
                 "article_url": story.article_url,
                 "published_date": story.published_date.strftime('%Y-%m-%d'),
                 "body_text": story.body_text[:100] + "..." if len(story.body_text) > 100 else story.body_text,
-                "tagged_companies": [company.name for company in story.tagged_companies.all()]
+                "tagged_companies": [company.name for company in story.tagged_companies.all()],
+                "persons": story.persons,
+                "organizations": story.organizations,
+                "locations": story.locations,
+                "has_duplicates": story.child_stories.exists(),
             }
             for story in page_obj
         ],

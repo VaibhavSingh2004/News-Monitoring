@@ -76,7 +76,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(
                 f"✗ Story #{story.id}: Groq API error — {response.status_code}\n{response.text}"))
             return
-        print(response.json())
+        # print(response.json())
 
         content = response.json()["choices"][0]["message"]["content"]
         entities = self.extract_entities_from_response(content)

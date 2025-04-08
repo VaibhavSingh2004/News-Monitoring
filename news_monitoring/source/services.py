@@ -127,10 +127,10 @@ def import_stories_from_feed(source, user):
             if Story.objects.filter(article_url=entry.link).exists():
                 continue  # Skip if story already exists
 
-            published_date = (
-                datetime.fromtimestamp(time.mktime(entry.published_parsed))
-                if hasattr(entry, "published_parsed") else None
-            )
+            published_date = datetime.now()
+            if hasattr(entry, "published_parsed") and isinstance(entry.published_parsed, time.struct_time):
+                published_date = datetime.fromtimestamp(time.mktime(entry.published_parsed))
+
             body_text_cleaned = BeautifulSoup(entry.get("summary", ""), "html.parser").get_text()
 
             new_stories.append(
@@ -153,6 +153,9 @@ def import_stories_from_feed(source, user):
             tagged_companies = list(source.tagged_companies.all())
             for story in Story.objects.filter(id__in=story_ids):
                 story.tagged_companies.set(tagged_companies)
+
+        print("Done - Story Fetching is completed")
+
     except feedparser.CharacterEncodingOverride as e:
         print(f"Error parsing feed: {e}")
     except Exception as e:

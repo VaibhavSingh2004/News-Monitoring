@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'story/css/list_stories.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+
+{% endblock %}
+
+{% block content %}
+<h2 class="page-title">Duplicate Stories</h2>
+
+<!-- Search and Filter Section -->
+<div class="filter-container">
+  <label for="search-title" class="filter-label">Search by Title:</label>
+  <input type="text" id="search-title" class="filter-input" placeholder="Enter story title...">
+
+  <label for="filter-date" class="filter-label">Filter by Date:</label>
+  <input type="date" id="filter-date" class="filter-input">
+</div>
+
+<div class="stories-container" id="stories-list"></div>
+<div class="pagination"></div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+<script>
+  function getStoryIdFromUrl() {
+    const match = window.location.pathname.match(/story\/(\d+)\//);
+    return match ? match[1] : null;
+  }
+
+  const storyId = getStoryIdFromUrl();
+
+  // Set URL appropriately
+  var storyListUrl = storyId
+      ? `/story/fetch-story/${storyId}/`
+      : `/story/fetch-story/`;
+</script>
+
+<script src="{% static 'js/pagination.js' %}"></script>
+<script src="{% static 'story/js/list_stories.js' %}"></script>
+{% endblock %}

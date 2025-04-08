@@ -10,8 +10,8 @@ class Command(BaseCommand):
         parser.add_argument(
             "--threshold",
             type=float,
-            default=0.9,
-            help="Cosine similarity threshold (default: 0.9)",
+            default=0.8,
+            help="Cosine similarity threshold (default: 0.8)",
         )
 
     def handle(self, *args, **options):
