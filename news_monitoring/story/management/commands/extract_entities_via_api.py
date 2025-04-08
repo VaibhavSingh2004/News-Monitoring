@@ -7,8 +7,8 @@ from news_monitoring.story.models import Story
 
 load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GROQ_MODEL = "llama3-8b-8192"
-GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL = os.getenv("GROQ_MODEL")
+GROQ_ENDPOINT = os.getenv("GROQ_ENDPOINT")
 
 
 class Command(BaseCommand):
