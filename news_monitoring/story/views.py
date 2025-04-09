@@ -72,13 +72,3 @@ def delete(request, story_id):
 @login_required
 def list_duplicates(request, story_id):
     return shortcuts.render(request, 'story/list_duplicates.html')
-
-
-@login_required
-def fetch_duplicates(request):
-    search_query = request.GET.get('q', '').strip()
-    filter_date = request.GET.get('date', '').strip()
-    page_number = request.GET.get('page')
-
-    stories_qs = services.get_stories(request.user, search_query, filter_date)
-    return JsonResponse(services.get_stories_json(stories_qs, page_number))

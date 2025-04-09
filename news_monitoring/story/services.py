@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
 from django.db import transaction, IntegrityError
 from django.db.models import Prefetch
-from django.http import JsonResponse
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
 from news_monitoring.company.models import Company
@@ -35,8 +35,11 @@ def get_stories(user, search_query, filter_date, story_id):
 
     if filter_date:
         stories_qs = stories_qs.filter(published_date=filter_date)
+        
+    if story_id:
+        return stories_qs.filter(Q(id=story_id) | Q(root_id=story_id))
 
-    return stories_qs.filter(root_id=story_id)
+    return stories_qs.filter(root_id=None)
 
 
 def get_stories_json(stories_qs, page_number):

@@ -63,7 +63,6 @@ function fetchSources(page=1) {
 
                             </td>
                         </tr>`);
-//                    sourceTableBody.append(rowHtml);
                 });
                 updatePagination(response);
             },
@@ -73,21 +72,21 @@ function fetchSources(page=1) {
             }
         });
     }
-
-function fetchStories() {
-        let sourceId = $(this).data("source-id");
-        let finalUrl = fetchStoriesUrl + sourceId + "/";
-
-        $.ajax({
-            url: finalUrl,
-            method: "POST",
-            headers: { "X-CSRFToken": csrfToken },
-            success: function (response) {
-                $("#fetch-message").text(response.message).show().delay(3000).fadeOut();
-            },
-            error: function (xhr) {
-                console.error("Error fetching story:", xhr.responseText);
-                alert("Failed to fetch story. Please try again.");
-            }
-        });
-    }
+//
+//function fetchStories() {
+//        let sourceId = $(this).data("source-id");
+//        let finalUrl = fetchStoriesUrl + sourceId + "/";
+//
+//        $.ajax({
+//            url: finalUrl,
+//            method: "POST",
+//            headers: { "X-CSRFToken": csrfToken },
+//            success: function (response) {
+//                $("#fetch-message").text(response.message).show().delay(3000).fadeOut();
+//            },
+//            error: function (xhr) {
+//                console.error("Error fetching story:", xhr.responseText);
+//                alert("Failed to fetch story. Please try again.");
+//            }
+//        });
+//    }
