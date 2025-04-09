@@ -4,19 +4,27 @@ from news_monitoring.story.management.commands import _helper as helper
 
 
 class Command(BaseCommand):
-    help = "Deduplicate stories using title + body_text with HashingVectorizer and cosine similarity."
+    help = "Deduplicate stories using either embeddings or HashingVectorizer."
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--threshold",
             type=float,
             default=0.8,
-            help="Cosine similarity threshold (default: 0.8)",
+            help="Similarity threshold (default: 0.8)",
+        )
+        parser.add_argument(
+            "--method",
+            type=str,
+            choices=["hashing", "embedding"],
+            default="hashing",
+            help="Vectorization method: 'hashing' or 'embedding' (default: hashing)",
         )
 
     def handle(self, *args, **options):
         threshold = options["threshold"]
-        self.stdout.write(f"Starting deduplication with threshold = {threshold}")
+        method = options["method"]
+        self.stdout.write(f"Starting deduplication using '{method}' method with threshold = {threshold}")
 
         stories = helper.get_stories()
         if not stories:
@@ -24,7 +32,14 @@ class Command(BaseCommand):
             return
 
         contents = helper.build_story_contents(stories)
-        similarity_matrix = helper.compute_similarity_matrix(contents)
+
+        if method == "hashing":
+            similarity_matrix = helper.compute_similarity_matrix_hashing(contents)
+        elif method == "embedding":
+            similarity_matrix = helper.compute_similarity_matrix_embeddings(contents)
+        else:
+            self.stderr.write(self.style.ERROR("Invalid method"))
+            return
 
         with transaction.atomic():
             count = helper.deduplicate_stories(stories, similarity_matrix, threshold)

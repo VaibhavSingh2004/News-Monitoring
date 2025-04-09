@@ -1,5 +1,7 @@
 from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
+
 from news_monitoring.story.models import Story
 
 
@@ -11,9 +13,15 @@ def build_story_contents(stories):
     return [(s.title or "") + " " + (s.body_text or "") for s in stories]
 
 
-def compute_similarity_matrix(texts, n_features=2 ** 12):
+def compute_similarity_matrix_hashing(texts, n_features=2 ** 12):
     vectorizer = HashingVectorizer(n_features=n_features, alternate_sign=False)
     return cosine_similarity(vectorizer.transform(texts))
+
+
+def compute_similarity_matrix_embeddings(texts):
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    embeddings = model.encode(texts, show_progress_bar=True)
+    return cosine_similarity(embeddings)
 
 
 def deduplicate_stories(stories, similarity_matrix, threshold):
@@ -33,7 +41,7 @@ def deduplicate_stories(stories, similarity_matrix, threshold):
             similarity = similarity_matrix[i, j]
             if similarity >= threshold:
                 stories[j].root = root_story
-                stories[j].save()
+                stories[j].save(update_fields=["root"])
                 seen.add(story_ids[j])
                 deduplicated_count += 1
 
